@@ -1,11 +1,16 @@
-import { fromEvent } from "rxjs";
+import { Observable } from "rxjs";
 
-const click$ = fromEvent(document, "click");
+const click$ = new Observable<MouseEvent>((observer) => {
+  const clickHandler = (e: MouseEvent) => observer.next(e);
+  document.addEventListener("click", clickHandler);
 
-console.log("First subscription");
-click$.subscribe(() => console.log("subscription1: click"));
+  return () => document.removeEventListener("click", clickHandler);
+});
+
+console.log("Subscription 1");
+click$.subscribe((e) => console.log("Subscription 1:", e.offsetX, e.offsetY));
 
 setTimeout(() => {
-  console.log("Second subscription");
-  click$.subscribe(() => console.log("subscription2: click"));
-}, 3000);
+  console.log("Subscription 2");
+  click$.subscribe((e) => console.log("Subscription 2:", e.offsetX, e.offsetY));
+}, 2000);
