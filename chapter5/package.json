@@ -1,0 +1,13 @@
+{
+  "name": "chapter5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node",
+    "dev": "nodemon --watch './src/**/*' -e ts --exec 'ts-node'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
