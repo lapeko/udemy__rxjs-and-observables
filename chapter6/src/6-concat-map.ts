@@ -1,7 +1,51 @@
-import { concatMap, fromEvent, interval, take } from "rxjs";
+import {
+  EMPTY,
+  catchError,
+  concatMap,
+  fromEvent,
+  map,
+  of,
+  switchMap,
+  throwError,
+} from "rxjs";
 
-const interval$ = interval(200).pipe(take(4));
+const option1 = document.createElement("option");
+option1.value = "success";
+option1.innerHTML = "success";
 
-fromEvent(document, "click")
-  .pipe(concatMap(() => interval$))
-  .subscribe((value) => console.log(value));
+const option2 = document.createElement("option");
+option2.value = "failure";
+option2.innerHTML = "failure";
+
+const select = document.createElement("select");
+select.value = "success";
+select.appendChild(option1);
+select.appendChild(option2);
+document.body.appendChild(select);
+
+const button = document.createElement("button");
+button.innerHTML = "Emit";
+document.body.appendChild(button);
+
+const ajaxLike = (value) => {
+  if (value === "failure") return throwError(() => new Error("Error"));
+  return of(value);
+};
+
+fromEvent(button, "click")
+  .pipe(
+    map(() => select.value),
+    concatMap((value) =>
+      ajaxLike(value).pipe(
+        catchError(() => {
+          console.log("Error");
+          return EMPTY;
+        })
+      )
+    )
+  )
+  .subscribe({
+    next: (value) => console.log("Next: ", value),
+    error: (error) => console.log(error),
+    complete: () => console.log("Completed"),
+  });
