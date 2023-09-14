@@ -1,10 +1,10 @@
 import {
   EMPTY,
   catchError,
-  concatMap,
   fromEvent,
   interval,
   map,
+  mergeMap,
   take,
   throwError,
 } from "rxjs";
@@ -35,7 +35,7 @@ const ajaxLike = (value: string) => {
 fromEvent(button, "click")
   .pipe(
     map(() => select.value),
-    concatMap((value) =>
+    mergeMap((value) =>
       ajaxLike(value).pipe(
         catchError(() => {
           console.log("Error");
