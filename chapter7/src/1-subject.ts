@@ -1,4 +1,4 @@
-import { Subject, fromEvent, map, withLatestFrom } from "rxjs";
+import { Subject, fromEvent, map } from "rxjs";
 
 const input = document.createElement("input");
 document.body.appendChild(input);
